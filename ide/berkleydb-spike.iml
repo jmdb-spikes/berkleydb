@@ -27,7 +27,9 @@
           <root url="file://$MODULE_DIR$/../lib/production" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../lib/source/berkley-db-je-5.048-src.zip!/src" />
+        </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/../lib/production" recursive="false" />
       </library>
     </orderEntry>

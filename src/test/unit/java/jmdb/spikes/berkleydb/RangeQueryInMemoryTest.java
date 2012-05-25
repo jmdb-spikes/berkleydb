@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.abs;
 import static java.lang.String.format;
 import static java.lang.System.out;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,10 +25,20 @@ public class RangeQueryInMemoryTest {
 
         Float[] range = range_from(values, 0.2f, 0.7f, 0.1f);
 
-        out.println("range is : " + printArray(range));
+        out.println("Range is (precision 0.1) : " + printArray(range));
 
         assertThat(range.length, is(6));
 
+        range = range_from(values, 0.2f, 0.7f, 0.01f);
+        out.println("Range is (precision 0.01) : " + printArray(range));
+
+        assertThat(range.length, is(5));
+
+    }
+
+    @Test
+    public void specific_test() {
+        assertThat(is_between(0.712f, 0.2f, 0.7f, 0.1f), is(true));
     }
 
     private static Float[] range_from(float[] input,
@@ -63,7 +74,7 @@ public class RangeQueryInMemoryTest {
                                             float b, float precision) {
         float diff = b - a;
 
-        if (diff >= 0 && diff <= precision) {  // equal
+        if (diff >= 0 && diff < precision) {  // equal
             return true;
         }
 
@@ -76,6 +87,16 @@ public class RangeQueryInMemoryTest {
 
     private static boolean lessthan_or_equal(float a,
                                              float b, float precision) {
+        float diff = a - b;
+
+        if (abs(diff) <= precision) {  // equal
+            return true;
+        }
+
+        if (a <= b) {
+            return true;
+        }
+
         return false;
     }
 
@@ -94,15 +115,44 @@ public class RangeQueryInMemoryTest {
     public void greater_than_or_equal_test() {
 
         float a = 0.1f;
-        float b = 0.12f;
+        float b = 0.123f;
         float c = 0.6f;
         float d = 0.01f;
+        float e = 0.2f;
+        float f = 0.11f;
+        float g = 0.112f;
 
         assertThat(greater_or_equal(a, b, 0.1f), is(true));
         assertThat(greater_or_equal(a, c, 0.1f), is(false));
         assertThat(greater_or_equal(c, a, 0.1f), is(true));
         assertThat(greater_or_equal(a, d, 0.1f), is(true));
         assertThat(greater_or_equal(a, b, 0.01f), is(false));
+        assertThat(greater_or_equal(a, e, 0.1f), is(false));
+        assertThat(greater_or_equal(e, a, 0.1f), is(true));
+        assertThat(greater_or_equal(a, f, 0.1f), is(true));
+        assertThat(greater_or_equal(a, g, 0.1f), is(true));
+    }
+
+    @Test
+    public void lessthan_or_equal_test() {
+
+        float a = 0.1f;
+        float b = 0.12f;
+        float c = 0.6f;
+        float d = 0.09f;
+        float e = 0.2f;
+
+
+        assertThat(lessthan_or_equal(a, b, 0.1f), is(true));
+        assertThat(lessthan_or_equal(b, a, 0.1f), is(true));
+        assertThat(lessthan_or_equal(a, b, 0.01f), is(true));
+
+        assertThat(lessthan_or_equal(a, c, 0.1f), is(true));
+        assertThat(lessthan_or_equal(c, a, 0.1f), is(false));
+        assertThat(lessthan_or_equal(a, d, 0.1f), is(true));
+        assertThat(lessthan_or_equal(a, e, 0.1f), is(true));
+        assertThat(lessthan_or_equal(e, a, 0.1f), is(false));
+
     }
 
     @Test

@@ -1,7 +1,5 @@
 package jmdb.spikes.berkleydb;
 
-import com.sleepycat.bind.tuple.IntegerBinding;
-import com.sleepycat.bind.tuple.StringBinding;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
@@ -11,6 +9,7 @@ import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 import com.sleepycat.je.Transaction;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,32 +32,70 @@ public class SimpleDemoTest {
             "  \"is\" : \"vcard\",\n" +
             "  \"postcode\" : \"TR8 5ET\",\n" +
             "}";
+    private Environment environment;
+    private Database db;
 
+    @Before
+    public void createAndOpenDb() {
+        environment = new Environment(createDatastoreFile(),
+                                      createEnvironmentConfig());
 
+        Transaction tx = environment.beginTransaction(null, null);
+
+        db = environment.openDatabase(tx,
+                                      "simpleDb",
+                                      createDbConfig());
+
+        tx.commit();
+
+        populateASimpleJsonObject();
+    }
+
+    @After
+    public void closeDb() {
+        db.close();
+        environment.close();
+    }
 
     /**
      * BerkleyDB databases are like collections in mongodb - you can store objects of a certain types in there, you then
      * create other's to do the mapping They are basically key value "buckets"
      */
     @Test
-    public void create_a_simple_datastore() throws Exception {
-
-        Environment environment = new Environment(createDatastoreFile(),
-                                                  createEnvironmentConfig());
-
-        Transaction tx = environment.beginTransaction(null, null);
-
-        Database db = environment.openDatabase(tx,
-                                               "simpleDb",
-                                               createDbConfig());
-
-        tx.commit();
-
+    public void read_with_a_cursor() {
 
         DatabaseEntry keyEntry = new DatabaseEntry();
         DatabaseEntry dataEntry = new DatabaseEntry();
 
-        tx = environment.beginTransaction(null, null);
+        out.println("Reading all objects...");
+        Cursor cursor = db.openCursor(null, null);
+        while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == SUCCESS) {
+            out.println("key = " + entryToString(keyEntry) + ":\n" + entryToString(dataEntry));
+        }
+        cursor.close();
+        out.println("Ok.");
+    }
+
+    @Test
+    public void read_by_key() {
+        DatabaseEntry keyEntry = new DatabaseEntry();
+        DatabaseEntry dataEntry = new DatabaseEntry();
+
+        stringToEntry(EXAMPLE_UUID, keyEntry);
+        OperationStatus status; out.println(format("Now retrieving the key [%s] ...", EXAMPLE_UUID));
+        status = db.get(null, keyEntry, dataEntry, LockMode.DEFAULT);
+        validateSuccess(status, "get");
+
+        out.println(format("Data from [%s]:\n%s", EXAMPLE_UUID, entryToString(dataEntry)));
+        out.println("Ok.\n");
+
+    }
+
+    private void populateASimpleJsonObject() {
+        DatabaseEntry keyEntry = new DatabaseEntry();
+        DatabaseEntry dataEntry = new DatabaseEntry();
+
+        Transaction tx = db.getEnvironment().beginTransaction(null, null);
 
         stringToEntry(EXAMPLE_UUID, keyEntry);
         stringToEntry(EXAMPLE_JSON, dataEntry);
@@ -69,26 +106,6 @@ public class SimpleDemoTest {
         out.println("ok.");
 
         tx.commit();
-
-        out.println("Reading all objects...");
-        Cursor cursor = db.openCursor(null, null);
-        while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == SUCCESS) {
-            out.println("key = " + entryToString(keyEntry) + ":\n  " + entryToString(dataEntry));
-        }
-        cursor.close();
-        out.println("Ok.");
-
-
-        out.println(format("Now retrieving the key [%s] ...", EXAMPLE_UUID));
-        status = db.get(null, keyEntry, dataEntry, LockMode.DEFAULT);
-        validateSuccess(status, "get");
-
-        out.println(format("Data from [%s]:\n", EXAMPLE_UUID, entryToString(dataEntry)));
-
-        db.close();
-        environment.close();
-
-
     }
 
     private static void validateSuccess(OperationStatus status, String message) {
@@ -124,7 +141,7 @@ public class SimpleDemoTest {
     private static void cleanDirectory(File dir) {
         File[] files = dir.listFiles();
 
-        for (int i=0; i<files.length;++i) {
+        for (int i = 0; i < files.length; ++i) {
             File f = files[i];
             deleteFile(f);
         }

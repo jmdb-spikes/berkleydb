@@ -19,54 +19,14 @@ import static org.hamcrest.Matchers.is;
  */
 public class RangeQueryInMemoryTest {
 
-    static class Box {
-        public final Point bottomLeft;
-        public final Point bottomRight;
-        public final Point topLeft;
-        public final Point topRight;
-
-        private Box(Point bottomLeft, Point bottomRight, Point topLeft, Point topRight) {
-            this.bottomLeft = bottomLeft;
-            this.bottomRight = bottomRight;
-            this.topLeft = topLeft;
-            this.topRight = topRight;
-        }
-
-        public static final Box box(Point bottomLeft, Point bottomRight, Point topLeft, Point topRight) {
-            return new Box(bottomLeft, bottomRight, topLeft, topRight);
-        }
-    }
-
-    static class Point {
-        public final float x;
-        public final float y;
-
-        private Point(float x, float y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public static Point point(float x, float y) {
-            return new Point(x, y);
-        }
-
-        public boolean isInBox(Box box, float precision) {
-            return is_between(x, box.bottomLeft.x, box.topRight.x, precision)
-                    && is_between(y, box.bottomLeft.y, box.topRight.y, precision);
-        }
-    }
-
     @Test
-    public void find_points_in_a_box() {
+    public void find_a_range_in_arrays() {
+        float[] x_arr = { 0.2f, 0.3f, 0.3f, 0.4f, 0.4f, 0.5f };
+        float[] y_arr = { 0.2f, 0.3f, 0.6f, 0.4f, 0.7f, 0.5f };
 
-        Point p1 = point(0.5f, 0.5f);
-        Point p2 = point(0.7f, 0.7f);
+        Point bottomLeft = point(0.25f, 0.25f);
+        Point topRight = point(0.45f, 0.45f);
 
-        Box b = box(point(0.4f, 0.4f), point(0.6f, 0.4f),
-                    point(0.4f, 0.6f), point(0.6f, 0.6f));
-
-        assertThat(p1.isInBox(b, 0.01f), is(true));
-        assertThat(p2.isInBox(b, 0.01f), is(false));
 
     }
 
@@ -249,5 +209,55 @@ public class RangeQueryInMemoryTest {
         return false;
     }
 
+    static class Box {
+        public final Point bottomLeft;
+        public final Point bottomRight;
+        public final Point topLeft;
+        public final Point topRight;
+
+        private Box(Point bottomLeft, Point bottomRight, Point topLeft, Point topRight) {
+            this.bottomLeft = bottomLeft;
+            this.bottomRight = bottomRight;
+            this.topLeft = topLeft;
+            this.topRight = topRight;
+        }
+
+        public static final Box box(Point bottomLeft, Point bottomRight, Point topLeft, Point topRight) {
+            return new Box(bottomLeft, bottomRight, topLeft, topRight);
+        }
+    }
+
+    static class Point {
+        public final float x;
+        public final float y;
+
+        private Point(float x, float y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public static Point point(float x, float y) {
+            return new Point(x, y);
+        }
+
+        public boolean isInBox(Box box, float precision) {
+            return is_between(x, box.bottomLeft.x, box.topRight.x, precision)
+                    && is_between(y, box.bottomLeft.y, box.topRight.y, precision);
+        }
+    }
+
+    @Test
+    public void find_points_in_a_box() {
+
+        Point p1 = point(0.5f, 0.5f);
+        Point p2 = point(0.7f, 0.7f);
+
+        Box b = box(point(0.4f, 0.4f), point(0.6f, 0.4f),
+                    point(0.4f, 0.6f), point(0.6f, 0.6f));
+
+        assertThat(p1.isInBox(b, 0.01f), is(true));
+        assertThat(p2.isInBox(b, 0.01f), is(false));
+
+    }
 
 }

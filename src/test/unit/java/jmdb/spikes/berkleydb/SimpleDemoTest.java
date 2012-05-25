@@ -37,7 +37,7 @@ public class SimpleDemoTest {
 
     @Before
     public void createAndOpenDb() {
-        environment = new Environment(createDatastoreFile(),
+        environment = new Environment(createDatastoreDir(),
                                       createEnvironmentConfig());
 
         Transaction tx = environment.beginTransaction(null, null);
@@ -83,7 +83,10 @@ public class SimpleDemoTest {
 
         stringToEntry(EXAMPLE_UUID, keyEntry);
         OperationStatus status; out.println(format("Now retrieving the key [%s] ...", EXAMPLE_UUID));
+
         status = db.get(null, keyEntry, dataEntry, LockMode.DEFAULT);
+
+
         validateSuccess(status, "get");
 
         out.println(format("Data from [%s]:\n%s", EXAMPLE_UUID, entryToString(dataEntry)));
@@ -128,7 +131,7 @@ public class SimpleDemoTest {
         return envConfig;
     }
 
-    private static File createDatastoreFile() {
+    private static File createDatastoreDir() {
         out.println(format("Creating clean database file [%s]", SIMPLE_DATASTORE_FILENAME));
         File dbFile = new File(SIMPLE_DATASTORE_FILENAME);
         if (dbFile.exists()) {

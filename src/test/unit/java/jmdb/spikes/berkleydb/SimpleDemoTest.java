@@ -26,7 +26,7 @@ import static java.util.UUID.randomUUID;
 
 public class SimpleDemoTest {
 
-    private static String SIMPLE_DATASTORE_FILENAME = "~/tmp/berkleydb/simple.db";
+    private static String SIMPLE_DATASTORE_FILENAME = System.getProperty("user.home") + "/tmp/berkleydb/simple.db";
 
     private static String EXAMPLE_UUID = randomUUID().toString();
     private static String EXAMPLE_JSON = "{\n" +
@@ -112,11 +112,27 @@ public class SimpleDemoTest {
     }
 
     private static File createDatastoreFile() {
-        out.println();
+        out.println(format("Creating clean database file [%s]", SIMPLE_DATASTORE_FILENAME));
         File dbFile = new File(SIMPLE_DATASTORE_FILENAME);
         if (dbFile.exists()) {
-            dbFile.delete();
+            cleanDirectory(dbFile);
         }
-        dbFile.mkdirs(); return dbFile;
+        dbFile.mkdirs();
+        return dbFile;
+    }
+
+    private static void cleanDirectory(File dir) {
+        File[] files = dir.listFiles();
+
+        for (int i=0; i<files.length;++i) {
+            File f = files[i];
+            deleteFile(f);
+        }
+
+        deleteFile(dir);
+    }
+
+    private static void deleteFile(File f) {
+        if (!f.delete()) throw new RuntimeException(format("Could not delete file [%s]", f.getAbsolutePath()));
     }
 }

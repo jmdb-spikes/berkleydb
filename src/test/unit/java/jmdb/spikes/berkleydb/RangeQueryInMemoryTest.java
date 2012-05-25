@@ -26,17 +26,8 @@ public class RangeQueryInMemoryTest {
 
         out.println("range is : " + printArray(range));
 
-    }
+        assertThat(range.length, is(6));
 
-    private static String printArray(Object[] array) {
-        StringBuilder sb = new StringBuilder();
-        for (int i=0;i<array.length;++i) {
-            sb.append(array[i]);
-            if (i < array.length-1) {
-                sb.append(", ");
-            }
-        }
-        return sb.toString();
     }
 
     private static Float[] range_from(float[] input,
@@ -58,11 +49,60 @@ public class RangeQueryInMemoryTest {
                                       float from, float to,
                                       float precision) {
 
-        if (subject >= from
-                && subject <= to) {
+
+        if (greater_or_equal(subject, from, precision)
+                && lessthan_or_equal(subject, to, precision)) {
             return true;
         }
         return false;
+    }
+
+
+
+    private static boolean greater_or_equal(float a,
+                                            float b, float precision) {
+        float diff = b - a;
+
+        if (diff >= 0 && diff <= precision) {  // equal
+            return true;
+        }
+
+        if (a >= b) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static boolean lessthan_or_equal(float a,
+                                             float b, float precision) {
+        return false;
+    }
+
+    private static String printArray(Object[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < array.length; ++i) {
+            sb.append(array[i]);
+            if (i < array.length - 1) {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
+    }
+
+    @Test
+    public void greater_than_or_equal_test() {
+
+        float a = 0.1f;
+        float b = 0.12f;
+        float c = 0.6f;
+        float d = 0.01f;
+
+        assertThat(greater_or_equal(a, b, 0.1f), is(true));
+        assertThat(greater_or_equal(a, c, 0.1f), is(false));
+        assertThat(greater_or_equal(c, a, 0.1f), is(true));
+        assertThat(greater_or_equal(a, d, 0.1f), is(true));
+        assertThat(greater_or_equal(a, b, 0.01f), is(false));
     }
 
     @Test

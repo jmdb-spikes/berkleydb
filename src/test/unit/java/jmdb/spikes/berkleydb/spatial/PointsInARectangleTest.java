@@ -1,9 +1,9 @@
-package jmdb.spikes.berkleydb;
+package jmdb.spikes.berkleydb.spatial;
 
 import org.junit.Test;
 
-import static jmdb.spikes.berkleydb.PointsInARectangleTest.Rectangle.rectangle;
-import static jmdb.spikes.berkleydb.PointsInARectangleTest.Point.point;
+import static jmdb.spikes.berkleydb.spatial.PointsInARectangleTest.Rectangle.rectangle;
+import static jmdb.spikes.berkleydb.spatial.PointsInARectangleTest.Point.point;
 import static jmdb.spikes.platform.FloatingPointMaths.is_between;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

@@ -1,4 +1,4 @@
-package jmdb.spikes.berkleydb;
+package jmdb.spikes.berkleydb.spatial;
 
 import jmdb.spikes.platform.ArrayManipulation;
 import jmdb.spikes.platform.FloatingPointMaths;
@@ -8,7 +8,7 @@ import static java.lang.Math.abs;
 import static java.lang.String.format;
 import static java.lang.System.out;
 import static java.util.Arrays.copyOfRange;
-import static jmdb.spikes.berkleydb.PointsInARectangleTest.Point.point;
+import static jmdb.spikes.berkleydb.spatial.PointsInARectangleTest.Point.point;
 import static jmdb.spikes.platform.ArrayManipulation.select_subset;
 import static jmdb.spikes.platform.ListManipulation.printList;
 import static org.hamcrest.MatcherAssert.assertThat;

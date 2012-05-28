@@ -23,7 +23,7 @@ import static java.lang.System.out;
 import static java.util.UUID.randomUUID;
 
 
-public class SimpleDemoTest {
+public class SimpleKeyValueStore {
 
     private static String SIMPLE_DATASTORE_FILENAME = System.getProperty("user.home") + "/tmp/berkleydb/simple.db";
 

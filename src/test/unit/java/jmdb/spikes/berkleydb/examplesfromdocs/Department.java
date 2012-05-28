@@ -1,8 +1,7 @@
-package jmdb.spikes.berkleydb.sqlexamples;
+package jmdb.spikes.berkleydb.examplesfromdocs;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
-import com.sleepycat.persist.model.Relationship;
 import com.sleepycat.persist.model.SecondaryKey;
 
 import static com.sleepycat.persist.model.Relationship.ONE_TO_ONE;

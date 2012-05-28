@@ -1,4 +1,4 @@
-package jmdb.spikes.berkleydb.sqlexamples;
+package jmdb.spikes.berkleydb.examplesfromdocs;
 
 /*-
  * See the file LICENSE for redistribution information.
@@ -17,7 +17,6 @@ import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.ForwardCursor;
 import com.sleepycat.persist.StoreConfig;
-import jmdb.spikes.berkleydb.sqlexamples.DataAccessor;
 
 /**
  * An example shows how some common SQL queries are implemented using DPL.

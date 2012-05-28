@@ -1,4 +1,4 @@
-package jmdb.spikes.berkleydb;
+package jmdb.spikes.berkleydb.examplesfromdocs;
 
 import com.sleepycat.bind.tuple.IntegerBinding;
 import com.sleepycat.je.*;

@@ -1,4 +1,4 @@
-package jmdb.spikes.berkleydb.sqlexamples;
+package jmdb.spikes.berkleydb.examplesfromdocs;
 
 /*-
  * See the file LICENSE for redistribution information.
@@ -12,7 +12,6 @@ import com.sleepycat.persist.EntityCursor;
 import java.util.Collection;
 
 import com.sleepycat.je.DatabaseException;
-import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityIndex;
 import com.sleepycat.persist.EntityJoin;
 import com.sleepycat.persist.EntityStore;

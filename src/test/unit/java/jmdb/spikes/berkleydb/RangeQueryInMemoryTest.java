@@ -3,13 +3,12 @@ package jmdb.spikes.berkleydb;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.abs;
 import static java.lang.String.format;
 import static java.lang.System.out;
-import static java.util.Arrays.asList;
+import static java.util.Arrays.copyOfRange;
 import static jmdb.spikes.berkleydb.RangeQueryInMemoryTest.Box.box;
 import static jmdb.spikes.berkleydb.RangeQueryInMemoryTest.Point.point;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,34 +20,55 @@ import static org.hamcrest.Matchers.is;
  */
 public class RangeQueryInMemoryTest {
 
+    public static final float TO_1_DP = 0.01f;
+
     @Test
-    public void find_a_range_in_arrays() {
-        float[] x_arr = { 0.2f, 0.3f, 0.3f, 0.4f, 0.4f, 0.5f };
-        float[] y_arr = { 0.2f, 0.3f, 0.6f, 0.4f, 0.7f, 0.5f };
+    public void find_a_range_in_two_independant_arrays() {
+        float[] x_arr = {0.2f, 0.3f, 0.3f, 0.4f, 0.4f, 0.5f};
+        float[] y_arr = {0.2f, 0.3f, 0.6f, 0.4f, 0.7f, 0.5f};
 
         Point bottomLeft = point(0.25f, 0.25f);
         Point topRight = point(0.45f, 0.45f);
 
-        int[] xIndexesInRange = indexes_in_range(x_arr, bottomLeft.x, topRight.x);
-        float[] xInRange = select_subset(x_arr, xIndexesInRange);
-
+        int[] xIndexesInRange = indexes_in_range(x_arr, bottomLeft.x, topRight.x, TO_1_DP);
         float[] ySubset = select_subset(y_arr, xIndexesInRange);
-        int[] set_y = indexes_in_range(ySubset, bottomLeft.x, topRight.x);
-        float[] yInRange = select_subset(ySubset, set_y);
+        int[] yIndexesInRangeAndSubset = indexes_in_range(ySubset, bottomLeft.x, topRight.x, TO_1_DP);
 
+        float[] xInRange = select_subset(x_arr, yIndexesInRangeAndSubset);
+        float[] yInRange = select_subset(ySubset, yIndexesInRangeAndSubset);
 
         out.println("Results In Box:");
         out.println(format("x: %s", printList(asList(xInRange))));
         out.println(format("y: %s", printList(asList(yInRange))));
 
+        assertThat(xInRange.length, is(yInRange.length));
+        assertThat(xInRange.length, is(2));
+
     }
 
-    private float[] select_subset(float[] y_arr, int[] xIndexesInRange) {
-        return new float[0];
+    private float[] select_subset(float[] input, int[] indexesToSelect) {
+        float[] selectedValues = new float[indexesToSelect.length];
+
+        for (int i = 0; i < indexesToSelect.length; ++i) {
+            selectedValues[i] = input[indexesToSelect[i]];
+        }
+
+        return selectedValues;
     }
 
-    private int[] indexes_in_range(float[] x_arr, float x, float x1) {
-        return new int[0];
+    private int[] indexes_in_range(float[] input, float from, float to, float precision) {
+
+        int[] indexes = new int[input.length];
+        int countOfIndexesInRange = 0;
+
+        for (int i = 0; i < input.length; ++i) {
+            if (is_between(input[i], from, to, precision)) {
+                indexes[countOfIndexesInRange] = i;
+                countOfIndexesInRange++;
+            }
+        }
+
+        return copyOfRange(indexes, 0, countOfIndexesInRange);
     }
 
 
@@ -142,6 +162,14 @@ public class RangeQueryInMemoryTest {
         ArrayList<Object> list = new ArrayList<Object>(floats.length);
         for (float f : floats) {
             list.add(f);
+        }
+        return list;
+    }
+
+    private static List<Object> asList(int[] ints) {
+        ArrayList<Object> list = new ArrayList<Object>(ints.length);
+        for (int i : ints) {
+            list.add(i);
         }
         return list;
     }

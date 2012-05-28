@@ -11,7 +11,9 @@ import java.util.List;
 
 import static java.awt.Color.DARK_GRAY;
 import static java.awt.Color.GREEN;
+import static java.awt.Color.LIGHT_GRAY;
 import static java.awt.RenderingHints.KEY_ANTIALIASING;
+import static java.awt.RenderingHints.VALUE_ANTIALIAS_OFF;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 import static java.lang.Math.max;
 import static java.lang.String.format;
@@ -21,11 +23,14 @@ public class CartesianSketchPad {
 
     private final int width;
     private final int height;
-    private List<Point> points = new ArrayList<Point>();
+
     private int borderWidth = 1;
     private Color pointColor = GREEN;
-    private int zoomPercentage;
+    private int zoomFactor = 1;
+    private boolean antialiasing = false;
 
+    private List<Rectangle> boundingRectangles = new ArrayList<Rectangle>();
+    private List<Point> points = new ArrayList<Point>();
 
     public static CartesianSketchPad createCartesianSketchPad(int limitX, int limitY) {
         return new CartesianSketchPad(limitX, limitY);
@@ -41,6 +46,13 @@ public class CartesianSketchPad {
         return this;
     }
 
+    public CartesianSketchPad addBoundingRectangle(int bottomLeft_X, int bottomLeft_y,
+                                                   int topRight_X, int topRight_Y) {
+
+        this.boundingRectangles.add(rectangle(bottomLeft_X, bottomLeft_y, topRight_X, topRight_Y));
+        return this;
+    }
+
 
     public void printTo(File file) {
         file.mkdirs();
@@ -48,14 +60,23 @@ public class CartesianSketchPad {
             file.delete();
         }
 
-        int canvasWidth = width + borderWidth * 2;
-        int canvasHeight = height + borderWidth * 2;
+
+        int canvasWidth = (width + borderWidth * 2) * zoomFactor;
+        int canvasHeight = (height + borderWidth * 2) * zoomFactor;
+
+        int strokeWidth = 1 * zoomFactor;
+
 
         BufferedImage image = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2 = initialiseCanvas(image);
 
-        drawRectangle(g2, DARK_GRAY, 1, 0, 0, canvasWidth, canvasHeight);
+
+        drawCanvasRectangle(g2, DARK_GRAY, strokeWidth, 0, 0, canvasWidth, canvasHeight);
+
+        for (Rectangle r : boundingRectangles) {
+            drawRectangle(g2, LIGHT_GRAY, strokeWidth, r.bottomLeftX, r.bottomLeftY, r.topRightX, r.topRightY);
+        }
 
         for (Point p : points) {
             drawPoint(g2, pointColor, p.x, p.y);
@@ -68,6 +89,20 @@ public class CartesianSketchPad {
             throw new RuntimeException(format("Failed to write image file [%s] (See cause)", file.getAbsolutePath()), e);
         }
 
+    }
+
+    private void drawRectangle(Graphics2D g2,
+                               Color color,
+                               int strokeWidth,
+                               int bottomLeftX, int bottomLeftY,
+                               int topRightX, int topRightY) {
+
+        int adj = (borderWidth * zoomFactor);
+        drawCanvasRectangle(g2,
+                            color,
+                            strokeWidth,
+                            bottomLeftX + adj, bottomLeftY + adj,
+                            topRightX * zoomFactor, topRightX * zoomFactor);
     }
 
     private void writeText(Graphics2D g2,
@@ -86,27 +121,42 @@ public class CartesianSketchPad {
         g2.setBackground(color);
         g2.setStroke(new BasicStroke(0));
         g2.setColor(color);
-        g2.fillRect(x + borderWidth, y + borderWidth, 1, 1);
+        g2.fillRect(x * zoomFactor + (borderWidth * zoomFactor), y * zoomFactor + (borderWidth * zoomFactor), zoomFactor, zoomFactor);
     }
 
     private Graphics2D initialiseCanvas(BufferedImage image) {
         Graphics2D g2 = image.createGraphics();
 
-        g2.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
+        if (antialiasing) {
+            turnOnAntialiasing(g2);
+        } else {
+            turnOffAntialiasing(g2);
+        }
+
         g2.setBackground(new Color(255, 255, 255));
-        g2.fillRect(0, 0, 1000, 1000);
+        g2.fillRect(0, 0, width * zoomFactor, height * zoomFactor);
         return g2;
     }
 
-    private void drawRectangle(Graphics2D g2, Color color,
-                               int strokeWidth,
-                               int bottom_x, int bottom_y, int top_x, int top_y) {
+    private void turnOnAntialiasing(Graphics2D g2) {
+        g2.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
+    }
+
+    private void turnOffAntialiasing(Graphics2D g2) {
+        g2.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_OFF);
+    }
+
+
+    private void drawCanvasRectangle(Graphics2D g2, Color color,
+                                     int strokeWidth,
+                                     int bottom_x, int bottom_y, int top_x, int top_y) {
+        int adj_bottom = strokeWidth / 2;
         g2.setStroke(new BasicStroke(strokeWidth));
 
-        int adj = max(1, strokeWidth - 1);
+        int adj_top = max(zoomFactor, strokeWidth - zoomFactor);
 
         g2.setColor(color);
-        g2.drawRect(bottom_x, bottom_y, top_x - adj, top_y - adj);
+        g2.drawRect(bottom_x + adj_bottom, bottom_y + adj_bottom, top_x - adj_top, top_y - adj_top);
     }
 
     private static Point point(int x , int y) {
@@ -114,8 +164,14 @@ public class CartesianSketchPad {
     }
 
     public CartesianSketchPad percentZoom(int zoomPercentage) {
-        this.zoomPercentage = zoomPercentage;
+        this.zoomFactor = zoomPercentage / 100;
         return this;
+    }
+
+
+
+    private static Rectangle rectangle(int bottomLeftX, int bottomLeftY, int topRightX, int topRightY) {
+        return new Rectangle(bottomLeftX, bottomLeftY, topRightX, topRightY);
     }
 
     private static class Point {
@@ -125,6 +181,20 @@ public class CartesianSketchPad {
         private Point(int x, int y) {
             this.x = x;
             this.y = y;
+        }
+    }
+
+    private static class Rectangle {
+        public final int bottomLeftX;
+        public final int bottomLeftY;
+        public final int topRightX;
+        public final int topRightY;
+
+        private Rectangle(int bottomLeftX, int bottomLeftY, int topRightX, int topRightY) {
+            this.bottomLeftX = bottomLeftX;
+            this.bottomLeftY = bottomLeftY;
+            this.topRightX = topRightX;
+            this.topRightY = topRightY;
         }
     }
 }

@@ -24,6 +24,7 @@ public class CartesianSketchPad {
     private List<Point> points = new ArrayList<Point>();
     private int borderWidth = 1;
     private Color pointColor = GREEN;
+    private int zoomPercentage;
 
 
     public static CartesianSketchPad createCartesianSketchPad(int limitX, int limitY) {
@@ -110,6 +111,11 @@ public class CartesianSketchPad {
 
     private static Point point(int x , int y) {
         return new Point(x, y);
+    }
+
+    public CartesianSketchPad percentZoom(int zoomPercentage) {
+        this.zoomPercentage = zoomPercentage;
+        return this;
     }
 
     private static class Point {

@@ -3,11 +3,13 @@ package jmdb.spikes.berkleydb;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.abs;
 import static java.lang.String.format;
 import static java.lang.System.out;
+import static java.util.Arrays.asList;
 import static jmdb.spikes.berkleydb.RangeQueryInMemoryTest.Box.box;
 import static jmdb.spikes.berkleydb.RangeQueryInMemoryTest.Point.point;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,7 +29,26 @@ public class RangeQueryInMemoryTest {
         Point bottomLeft = point(0.25f, 0.25f);
         Point topRight = point(0.45f, 0.45f);
 
+        int[] xIndexesInRange = indexes_in_range(x_arr, bottomLeft.x, topRight.x);
+        float[] xInRange = select_subset(x_arr, xIndexesInRange);
 
+        float[] ySubset = select_subset(y_arr, xIndexesInRange);
+        int[] set_y = indexes_in_range(ySubset, bottomLeft.x, topRight.x);
+        float[] yInRange = select_subset(ySubset, set_y);
+
+
+        out.println("Results In Box:");
+        out.println(format("x: %s", printList(asList(xInRange))));
+        out.println(format("y: %s", printList(asList(yInRange))));
+
+    }
+
+    private float[] select_subset(float[] y_arr, int[] xIndexesInRange) {
+        return new float[0];
+    }
+
+    private int[] indexes_in_range(float[] x_arr, float x, float x1) {
+        return new int[0];
     }
 
 
@@ -115,6 +136,25 @@ public class RangeQueryInMemoryTest {
         }
 
         return false;
+    }
+
+    private static List<Object> asList(float[] floats) {
+        ArrayList<Object> list = new ArrayList<Object>(floats.length);
+        for (float f : floats) {
+            list.add(f);
+        }
+        return list;
+    }
+
+    private static String printList(List<Object> list) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); ++i) {
+            sb.append(list.get(i));
+            if (i < list.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
     }
 
     private static String printArray(Object[] array) {

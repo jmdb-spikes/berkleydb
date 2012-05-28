@@ -104,8 +104,8 @@ public class CartesianSketchPad {
         drawCanvasRectangle(g2,
                             color,
                             strokeWidth,
-                            bottomLeftX + adj, bottomLeftY + adj,
-                            topRightX * zoomFactor, topRightY * zoomFactor);
+                            bottomLeftX + adj -1, bottomLeftY + adj - 1,
+                            (topRightX -1) * zoomFactor, (topRightY -1) * zoomFactor);
     }
 
     private void writeText(Graphics2D g2,
@@ -124,7 +124,7 @@ public class CartesianSketchPad {
         g2.setBackground(color);
         g2.setStroke(new BasicStroke(0));
         g2.setColor(color);
-        g2.fillRect(x * zoomFactor + (borderWidth * zoomFactor), y * zoomFactor + (borderWidth * zoomFactor), zoomFactor, zoomFactor);
+        g2.fillRect((x -1) * zoomFactor + (borderWidth * zoomFactor), (y -1) * zoomFactor + (borderWidth * zoomFactor), zoomFactor, zoomFactor);
     }
 
     private Graphics2D initialiseCanvas(BufferedImage image,

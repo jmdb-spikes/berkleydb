@@ -69,7 +69,7 @@ public class CartesianSketchPad {
 
         BufferedImage image = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_ARGB);
 
-        Graphics2D g2 = initialiseCanvas(image);
+        Graphics2D g2 = initialiseCanvas(image, canvasWidth, canvasHeight);
 
 
         drawCanvasRectangle(g2, DARK_GRAY, strokeWidth, 0, 0, canvasWidth, canvasHeight);
@@ -124,7 +124,8 @@ public class CartesianSketchPad {
         g2.fillRect(x * zoomFactor + (borderWidth * zoomFactor), y * zoomFactor + (borderWidth * zoomFactor), zoomFactor, zoomFactor);
     }
 
-    private Graphics2D initialiseCanvas(BufferedImage image) {
+    private Graphics2D initialiseCanvas(BufferedImage image,
+                                        int canvasWidth, int canvasHeight) {
         Graphics2D g2 = image.createGraphics();
 
         if (antialiasing) {
@@ -134,7 +135,7 @@ public class CartesianSketchPad {
         }
 
         g2.setBackground(new Color(255, 255, 255));
-        g2.fillRect(0, 0, width * zoomFactor, height * zoomFactor);
+        g2.fillRect(0, 0, canvasWidth, canvasHeight);
         return g2;
     }
 
@@ -156,6 +157,7 @@ public class CartesianSketchPad {
         int adj_top = max(zoomFactor, strokeWidth - zoomFactor);
 
         g2.setColor(color);
+
         g2.drawRect(bottom_x + adj_bottom, bottom_y + adj_bottom, top_x - adj_top, top_y - adj_top);
     }
 

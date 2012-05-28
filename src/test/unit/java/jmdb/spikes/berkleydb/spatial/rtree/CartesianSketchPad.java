@@ -152,7 +152,8 @@ public class CartesianSketchPad {
 
     private Graphics2D initialiseCanvas(BufferedImage image,
                                         int canvasWidth, int canvasHeight) {
-        Graphics2D g2 = image.createGraphics();
+        Graphics2D g2 = new InvertedGraphics(image.createGraphics(),
+                                             canvasWidth, canvasHeight);
 
         if (antialiasing) {
             turnOnAntialiasing(g2);

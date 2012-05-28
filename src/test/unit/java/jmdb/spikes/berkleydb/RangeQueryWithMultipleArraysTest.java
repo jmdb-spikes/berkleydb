@@ -14,7 +14,7 @@ import static jmdb.spikes.platform.ListManipulation.printList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class RangeQueryWithArraysTest {
+public class RangeQueryWithMultipleArraysTest {
 
     @Test
     public void find_a_range_in_two_independant_arrays() {

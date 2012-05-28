@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.is;
  * A simple in memory test of the theory behind finding points within a radius which we can then translate into
  * berkeleydb code.
  */
-public class RangeQueryInMemoryTest {
+public class RangeQueryWithSingleArrayTest {
 
     @Test
     public void find_a_range() {

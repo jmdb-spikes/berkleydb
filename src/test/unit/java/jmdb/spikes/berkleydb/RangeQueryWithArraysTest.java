@@ -1,5 +1,8 @@
 package jmdb.spikes.berkleydb;
 
+import jmdb.spikes.platform.ArrayManipulation;
+import jmdb.spikes.platform.FloatingPointMaths;
+import jmdb.spikes.platform.ListManipulation;
 import org.junit.Test;
 
 import static java.lang.Math.abs;

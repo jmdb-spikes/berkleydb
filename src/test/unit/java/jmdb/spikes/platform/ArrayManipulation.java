@@ -1,10 +1,9 @@
-package jmdb.spikes.berkleydb;
+package jmdb.spikes.platform;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.copyOfRange;
-import static jmdb.spikes.berkleydb.FloatingPointMaths.is_between;
 
 public class ArrayManipulation {
 
@@ -30,7 +29,7 @@ public class ArrayManipulation {
         int countOfIndexesInRange = 0;
 
         for (int i = 0; i < input.length; ++i) {
-            if (is_between(input[i], from, to, precision)) {
+            if (FloatingPointMaths.is_between(input[i], from, to, precision)) {
                 indexes[countOfIndexesInRange] = i;
                 countOfIndexesInRange++;
             }

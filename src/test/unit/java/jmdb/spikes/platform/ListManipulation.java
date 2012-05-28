@@ -1,4 +1,4 @@
-package jmdb.spikes.berkleydb;
+package jmdb.spikes.platform;
 
 import java.util.List;
 

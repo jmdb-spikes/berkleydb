@@ -14,6 +14,12 @@ public class RTreeTest {
     public void build_and_show_some_points() {
         CartesianSketchPad sketch = createCartesianSketchPad(100, 100);
 
+        sketch.addPoint(0, 0)
+              .addPoint(99, 99)
+              .addPoint(50, 50)
+              .addPoint(0, 99)
+              .addPoint(99, 0);
+
         sketch.printTo(new File(OUTPUT_DIR, "simple_sketch.png"));
 
 

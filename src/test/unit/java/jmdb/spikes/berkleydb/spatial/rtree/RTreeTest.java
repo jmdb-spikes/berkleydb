@@ -12,7 +12,7 @@ public class RTreeTest {
 
     @Test
     public void build_and_show_some_points() {
-        CartesianSketchPad sketch = createCartesianSketchPad(100, 100).percentZoom(900);
+        CartesianSketchPad sketch = createCartesianSketchPad(100, 100).percentZoom(1000);
 
         sketch.addPoint(0, 0)
               .addPoint(99, 99)

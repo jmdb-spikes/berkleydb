@@ -46,10 +46,11 @@ public class CartesianSketchPad {
         return this;
     }
 
-    public CartesianSketchPad addBoundingRectangle(int bottomLeft_X, int bottomLeft_y,
-                                                   int topRight_X, int topRight_Y) {
+    public CartesianSketchPad addBoundingRectangle(int bottomLeft_x, int bottomLeft_y,
+                                                   int topRight_y, int topRight_Y) {
 
-        this.boundingRectangles.add(rectangle(bottomLeft_X, bottomLeft_y, topRight_X, topRight_Y));
+        this.boundingRectangles.add(rectangle(bottomLeft_x, bottomLeft_y,
+                                              topRight_y, topRight_Y));
         return this;
     }
 
@@ -113,12 +114,16 @@ public class CartesianSketchPad {
                                int bottomLeftX, int bottomLeftY,
                                int topRightX, int topRightY) {
 
-        int adj = (borderWidth * zoomFactor);
+
+        int width = topRightX - bottomLeftX;
+        int height = topRightY - bottomLeftY;
+
         drawCanvasRectangle(g2,
                             color,
                             strokeWidth,
-                            bottomLeftX + adj, bottomLeftY + adj,
-                            topRightX * zoomFactor, topRightY * zoomFactor);
+                            (bottomLeftX + borderWidth) * zoomFactor,
+                            (bottomLeftY + borderWidth) * zoomFactor,
+                            width * zoomFactor, height * zoomFactor);
     }
 
     private void drawCanvasRectangle(Graphics2D g2, Color color,

@@ -2,14 +2,13 @@ package jmdb.spikes.berkleydb;
 
 import jmdb.spikes.platform.ArrayManipulation;
 import jmdb.spikes.platform.FloatingPointMaths;
-import jmdb.spikes.platform.ListManipulation;
 import org.junit.Test;
 
 import static java.lang.Math.abs;
 import static java.lang.String.format;
 import static java.lang.System.out;
 import static java.util.Arrays.copyOfRange;
-import static jmdb.spikes.berkleydb.RangeQueryInMemoryTest.Point.point;
+import static jmdb.spikes.berkleydb.PointsInARectangleTest.Point.point;
 import static jmdb.spikes.platform.ArrayManipulation.select_subset;
 import static jmdb.spikes.platform.ListManipulation.printList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,8 +21,8 @@ public class RangeQueryWithArraysTest {
         float[] x_arr = {0.2f, 0.3f, 0.3f, 0.4f, 0.4f, 0.5f};
         float[] y_arr = {0.2f, 0.3f, 0.6f, 0.4f, 0.7f, 0.5f};
 
-        RangeQueryInMemoryTest.Point bottomLeft = point(0.25f, 0.25f);
-        RangeQueryInMemoryTest.Point topRight = point(0.45f, 0.45f);
+        PointsInARectangleTest.Point bottomLeft = point(0.25f, 0.25f);
+        PointsInARectangleTest.Point topRight = point(0.45f, 0.45f);
 
         int[] xIndexesInRange = ArrayManipulation.indexes_in_range(x_arr, bottomLeft.x, topRight.x, FloatingPointMaths.TO_1_DP);
         float[] ySubset = select_subset(y_arr, xIndexesInRange);

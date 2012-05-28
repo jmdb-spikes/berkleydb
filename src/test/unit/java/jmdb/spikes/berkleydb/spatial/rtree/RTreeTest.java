@@ -15,12 +15,13 @@ public class RTreeTest {
         CartesianSketchPad sketch = createCartesianSketchPad(100, 100).percentZoom(1000);
 
         sketch.addPoint(0, 0)
+              .addPoint(19, 19)
               .addPoint(99, 99)
               .addPoint(50, 50)
               .addPoint(0, 99)
               .addPoint(99, 0);
 
-        sketch.addBoundingRectangle(0, 0, 20, 20);
+        sketch.addBoundingRectangle(0, 0, 19, 19);
 
 
         sketch.printTo(new File(OUTPUT_DIR, "simple_sketch.png"));

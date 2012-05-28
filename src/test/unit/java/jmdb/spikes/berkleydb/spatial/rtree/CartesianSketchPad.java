@@ -61,8 +61,8 @@ public class CartesianSketchPad {
         }
 
 
-        int canvasWidth = (width + borderWidth * 2) * zoomFactor;
-        int canvasHeight = (height + borderWidth * 2) * zoomFactor;
+        int canvasWidth = (width + (borderWidth * 2)) * zoomFactor;
+        int canvasHeight = (height + (borderWidth * 2)) * zoomFactor;
 
         int strokeWidth = 1 * zoomFactor;
 
@@ -72,7 +72,10 @@ public class CartesianSketchPad {
         Graphics2D g2 = initialiseCanvas(image, canvasWidth, canvasHeight);
 
 
-        drawCanvasRectangle(g2, DARK_GRAY, strokeWidth, 0, 0, canvasWidth, canvasHeight);
+        int adj_top = max(borderWidth * zoomFactor, strokeWidth - zoomFactor);
+        drawCanvasRectangle(g2, DARK_GRAY, strokeWidth,
+                            0, 0,
+                            canvasWidth - adj_top, canvasHeight - adj_top);
 
         for (Rectangle r : boundingRectangles) {
             drawRectangle(g2, LIGHT_GRAY, strokeWidth, r.bottomLeftX, r.bottomLeftY, r.topRightX, r.topRightY);
@@ -102,7 +105,7 @@ public class CartesianSketchPad {
                             color,
                             strokeWidth,
                             bottomLeftX + adj, bottomLeftY + adj,
-                            topRightX * zoomFactor, topRightX * zoomFactor);
+                            topRightX * zoomFactor, topRightY * zoomFactor);
     }
 
     private void writeText(Graphics2D g2,
@@ -150,15 +153,17 @@ public class CartesianSketchPad {
 
     private void drawCanvasRectangle(Graphics2D g2, Color color,
                                      int strokeWidth,
-                                     int bottom_x, int bottom_y, int top_x, int top_y) {
+                                     int bottom_x, int bottom_y,
+                                     int width, int height) {
         int adj_bottom = strokeWidth / 2;
         g2.setStroke(new BasicStroke(strokeWidth));
 
-        int adj_top = max(zoomFactor, strokeWidth - zoomFactor);
+
 
         g2.setColor(color);
 
-        g2.drawRect(bottom_x + adj_bottom, bottom_y + adj_bottom, top_x - adj_top, top_y - adj_top);
+        g2.drawRect(bottom_x + adj_bottom, bottom_y + adj_bottom,
+                    width, height);
     }
 
     private static Point point(int x , int y) {

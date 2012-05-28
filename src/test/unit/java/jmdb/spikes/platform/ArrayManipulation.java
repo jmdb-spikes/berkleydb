@@ -11,7 +11,7 @@ public class ArrayManipulation {
     private ArrayManipulation(){
     };
 
-    static float[] select_subset(float[] input, int[] indexesToSelect) {
+    public static float[] select_subset(float[] input, int[] indexesToSelect) {
         float[] selectedValues = new float[indexesToSelect.length];
 
         for (int i = 0; i < indexesToSelect.length; ++i) {

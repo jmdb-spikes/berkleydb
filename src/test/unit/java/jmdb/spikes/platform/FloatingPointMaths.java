@@ -8,7 +8,7 @@ import static java.lang.Math.abs;
 public class FloatingPointMaths {
     public static final float TO_1_DP = 0.01f;
 
-    static boolean float_eq(float a, float b, float precision) {
+    public static boolean float_eq(float a, float b, float precision) {
         float diff_a_b = a - b;
         if (diff_a_b < precision) {
             return true;
@@ -16,7 +16,7 @@ public class FloatingPointMaths {
         return false;
     }
 
-    static boolean greater_or_equal(float a,
+    public static boolean greater_or_equal(float a,
                                     float b, float precision) {
         float diff = b - a;
 
@@ -31,7 +31,7 @@ public class FloatingPointMaths {
         return false;
     }
 
-    static boolean lessthan_or_equal(float a,
+    public static boolean lessthan_or_equal(float a,
                                      float b, float precision) {
         float diff = a - b;
 

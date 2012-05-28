@@ -10,6 +10,8 @@ import static java.lang.System.out;
 import static java.util.Arrays.copyOfRange;
 import static jmdb.spikes.berkleydb.RangeQueryInMemoryTest.Box.box;
 import static jmdb.spikes.berkleydb.RangeQueryInMemoryTest.Point.point;
+import static jmdb.spikes.platform.FloatingPointMaths.greater_or_equal;
+import static jmdb.spikes.platform.FloatingPointMaths.lessthan_or_equal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -59,15 +61,15 @@ public class RangeQueryInMemoryTest {
         float f = 0.11f;
         float g = 0.112f;
 
-        assertThat(FloatingPointMaths.greater_or_equal(a, b, 0.1f), is(true));
-        assertThat(FloatingPointMaths.greater_or_equal(a, c, 0.1f), is(false));
-        assertThat(FloatingPointMaths.greater_or_equal(c, a, 0.1f), is(true));
-        assertThat(FloatingPointMaths.greater_or_equal(a, d, 0.1f), is(true));
-        assertThat(FloatingPointMaths.greater_or_equal(a, b, 0.01f), is(false));
-        assertThat(FloatingPointMaths.greater_or_equal(a, e, 0.1f), is(false));
-        assertThat(FloatingPointMaths.greater_or_equal(e, a, 0.1f), is(true));
-        assertThat(FloatingPointMaths.greater_or_equal(a, f, 0.1f), is(true));
-        assertThat(FloatingPointMaths.greater_or_equal(a, g, 0.1f), is(true));
+        assertThat(greater_or_equal(a, b, 0.1f), is(true));
+        assertThat(greater_or_equal(a, c, 0.1f), is(false));
+        assertThat(greater_or_equal(c, a, 0.1f), is(true));
+        assertThat(greater_or_equal(a, d, 0.1f), is(true));
+        assertThat(greater_or_equal(a, b, 0.01f), is(false));
+        assertThat(greater_or_equal(a, e, 0.1f), is(false));
+        assertThat(greater_or_equal(e, a, 0.1f), is(true));
+        assertThat(greater_or_equal(a, f, 0.1f), is(true));
+        assertThat(greater_or_equal(a, g, 0.1f), is(true));
     }
 
     @Test
@@ -80,15 +82,15 @@ public class RangeQueryInMemoryTest {
         float e = 0.2f;
 
 
-        assertThat(FloatingPointMaths.lessthan_or_equal(a, b, 0.1f), is(true));
-        assertThat(FloatingPointMaths.lessthan_or_equal(b, a, 0.1f), is(true));
-        assertThat(FloatingPointMaths.lessthan_or_equal(a, b, 0.01f), is(true));
+        assertThat(lessthan_or_equal(a, b, 0.1f), is(true));
+        assertThat(lessthan_or_equal(b, a, 0.1f), is(true));
+        assertThat(lessthan_or_equal(a, b, 0.01f), is(true));
 
-        assertThat(FloatingPointMaths.lessthan_or_equal(a, c, 0.1f), is(true));
-        assertThat(FloatingPointMaths.lessthan_or_equal(c, a, 0.1f), is(false));
-        assertThat(FloatingPointMaths.lessthan_or_equal(a, d, 0.1f), is(true));
-        assertThat(FloatingPointMaths.lessthan_or_equal(a, e, 0.1f), is(true));
-        assertThat(FloatingPointMaths.lessthan_or_equal(e, a, 0.1f), is(true));
+        assertThat(lessthan_or_equal(a, c, 0.1f), is(true));
+        assertThat(lessthan_or_equal(c, a, 0.1f), is(false));
+        assertThat(lessthan_or_equal(a, d, 0.1f), is(true));
+        assertThat(lessthan_or_equal(a, e, 0.1f), is(true));
+        assertThat(lessthan_or_equal(e, a, 0.1f), is(true));
 
     }
 

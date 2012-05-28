@@ -14,12 +14,12 @@ public class RTreeTest {
     public void build_and_show_some_points() {
         CartesianSketchPad sketch = createCartesianSketchPad(100, 100).percentZoom(1000);
 
-        sketch.addPoint(1, 1)
+        sketch.addPoint(0, 0)
               .addPoint(20, 20)
               .addPoint(100, 100)
               .addPoint(50, 50)
-              .addPoint(1, 100)
-              .addPoint(100, 1);
+              .addPoint(0, 100)
+              .addPoint(100, 0);
 
         sketch.addBoundingRectangle(1, 1, 20, 20);
 

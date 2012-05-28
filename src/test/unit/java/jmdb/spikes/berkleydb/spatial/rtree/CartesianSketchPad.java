@@ -78,7 +78,8 @@ public class CartesianSketchPad {
                             canvasWidth - adj_top, canvasHeight - adj_top);
 
         for (Rectangle r : boundingRectangles) {
-            drawRectangle(g2, LIGHT_GRAY, strokeWidth, r.bottomLeftX, r.bottomLeftY, r.topRightX, r.topRightY);
+            drawRectangle(g2, LIGHT_GRAY, strokeWidth,
+                          r.bottomLeftX, r.bottomLeftY, r.topRightX, r.topRightY);
         }
 
         for (Point p : points) {

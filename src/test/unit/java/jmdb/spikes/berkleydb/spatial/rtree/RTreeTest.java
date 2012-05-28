@@ -21,7 +21,7 @@ public class RTreeTest {
               .addPoint(0, 100)
               .addPoint(100, 0);
 
-        sketch.addBoundingRectangle(1, 1, 20, 20);
+        sketch.addBoundingRectangle(0, 0, 20, 20);
 
 
         sketch.printTo(new File(OUTPUT_DIR, "simple_sketch.png"));

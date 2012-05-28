@@ -12,9 +12,11 @@ import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
 import java.util.Map;
 
+import static java.lang.Math.abs;
+
 /**
- * The coordinate system of the standard Graphics2D means that the 0,0 is in the top left
- * This is normally in the lower left, so this class wraps a Graphics2D and inverts everything
+ * The coordinate system of the standard Graphics2D means that the 0,0 is in the top left This is normally in the lower
+ * left, so this class wraps a Graphics2D and inverts everything
  */
 public class InvertedGraphics extends Graphics2D {
 
@@ -56,6 +58,8 @@ public class InvertedGraphics extends Graphics2D {
     @Override public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
         delegate.drawRenderedImage(img, xform);
     }
+
+
 
     @Override public void drawRenderableImage(RenderableImage img, AffineTransform xform) {
         delegate.drawRenderableImage(img, xform);
@@ -218,11 +222,20 @@ public class InvertedGraphics extends Graphics2D {
     }
 
     @Override public void drawLine(int x1, int y1, int x2, int y2) {
-        delegate.drawLine(x1, invert(y1), x2, y2);
+        int invertedY1 = heightInPixels - y1;
+        int invertedY2 = heightInPixels - y2;
+
+        delegate.drawLine(x1, invertedY1, x2, invertedY2);
     }
 
     @Override public void fillRect(int x, int y, int width, int height) {
-        delegate.fillRect(x, invert(y), width, height);
+        int invertedY = heightInPixels - (y + height);
+        delegate.fillRect(x, invertedY, width, height);
+    }
+
+    @Override public void drawRect(int x, int y, int width, int height) {
+        //int invertedY = heightInPixels - (y + height);
+        super.drawRect(x, y, width, height);
     }
 
     @Override public void clearRect(int x, int y, int width, int height) {
@@ -293,7 +306,7 @@ public class InvertedGraphics extends Graphics2D {
     }
 
     @Override public void setTransform(AffineTransform Tx) {
-       delegate.setTransform(Tx);
+        delegate.setTransform(Tx);
     }
 
     @Override public AffineTransform getTransform() {

@@ -2,9 +2,6 @@ package jmdb.spikes.berkleydb;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static java.lang.Math.abs;
 import static java.lang.String.format;
 import static java.lang.System.out;
@@ -20,71 +17,19 @@ import static org.hamcrest.Matchers.is;
  */
 public class RangeQueryInMemoryTest {
 
-    public static final float TO_1_DP = 0.01f;
-
-    @Test
-    public void find_a_range_in_two_independant_arrays() {
-        float[] x_arr = {0.2f, 0.3f, 0.3f, 0.4f, 0.4f, 0.5f};
-        float[] y_arr = {0.2f, 0.3f, 0.6f, 0.4f, 0.7f, 0.5f};
-
-        Point bottomLeft = point(0.25f, 0.25f);
-        Point topRight = point(0.45f, 0.45f);
-
-        int[] xIndexesInRange = indexes_in_range(x_arr, bottomLeft.x, topRight.x, TO_1_DP);
-        float[] ySubset = select_subset(y_arr, xIndexesInRange);
-        int[] yIndexesInRangeAndSubset = indexes_in_range(ySubset, bottomLeft.x, topRight.x, TO_1_DP);
-
-        float[] xInRange = select_subset(x_arr, yIndexesInRangeAndSubset);
-        float[] yInRange = select_subset(ySubset, yIndexesInRangeAndSubset);
-
-        out.println("Results In Box:");
-        out.println(format("x: %s", printList(asList(xInRange))));
-        out.println(format("y: %s", printList(asList(yInRange))));
-
-        assertThat(xInRange.length, is(yInRange.length));
-        assertThat(xInRange.length, is(2));
-
-    }
-
-    private float[] select_subset(float[] input, int[] indexesToSelect) {
-        float[] selectedValues = new float[indexesToSelect.length];
-
-        for (int i = 0; i < indexesToSelect.length; ++i) {
-            selectedValues[i] = input[indexesToSelect[i]];
-        }
-
-        return selectedValues;
-    }
-
-    private int[] indexes_in_range(float[] input, float from, float to, float precision) {
-
-        int[] indexes = new int[input.length];
-        int countOfIndexesInRange = 0;
-
-        for (int i = 0; i < input.length; ++i) {
-            if (is_between(input[i], from, to, precision)) {
-                indexes[countOfIndexesInRange] = i;
-                countOfIndexesInRange++;
-            }
-        }
-
-        return copyOfRange(indexes, 0, countOfIndexesInRange);
-    }
-
-
     @Test
     public void find_a_range() {
 
         float[] values = new float[]{0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.712f, 0.8f, 0.9f, 1.0f};
 
-        Float[] range = range_from(values, 0.2f, 0.7f, 0.1f);
+        Float[] range = FloatingPointMaths.range_from(values, 0.2f, 0.7f, 0.1f);
 
-        out.println("Range is (precision 0.1) : " + printArray(range));
+        out.println("Range is (precision 0.1) : " + ArrayManipulation.printArray(range));
 
         assertThat(range.length, is(6));
 
-        range = range_from(values, 0.2f, 0.7f, 0.01f);
-        out.println("Range is (precision 0.01) : " + printArray(range));
+        range = FloatingPointMaths.range_from(values, 0.2f, 0.7f, 0.01f);
+        out.println("Range is (precision 0.01) : " + ArrayManipulation.printArray(range));
 
         assertThat(range.length, is(5));
 
@@ -92,109 +37,14 @@ public class RangeQueryInMemoryTest {
 
     @Test
     public void specific_test() {
-        assertThat(is_between(0.712f, 0.2f, 0.7f, 0.1f), is(true));
+        assertThat(FloatingPointMaths.is_between(0.712f, 0.2f, 0.7f, 0.1f), is(true));
     }
 
     @Test
     public void specific_test_b() {
-        assertThat(is_between(0.7f, 0.4f, 0.6f, 0.01f), is(false));
+        assertThat(FloatingPointMaths.is_between(0.7f, 0.4f, 0.6f, 0.01f), is(false));
     }
 
-    private static Float[] range_from(float[] input,
-                                      float from, float to,
-                                      float precision) {
-
-        List<Float> result = new ArrayList<Float>();
-
-        for (int i = 0; i < input.length; ++i) {
-            if (is_between(input[i], from, to, precision)) {
-                result.add(input[i]);
-            }
-        }
-
-        return result.toArray(new Float[]{});
-    }
-
-    private static boolean is_between(float subject,
-                                      float from, float to,
-                                      float precision) {
-
-
-        if (greater_or_equal(subject, from, precision)
-                && lessthan_or_equal(subject, to, precision)) {
-            return true;
-        }
-        return false;
-    }
-
-
-    private static boolean greater_or_equal(float a,
-                                            float b, float precision) {
-        float diff = b - a;
-
-        if (diff >= 0 && diff < precision) {  // equal
-            return true;
-        }
-
-        if (a >= b) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private static boolean lessthan_or_equal(float a,
-                                             float b, float precision) {
-        float diff = a - b;
-
-        if (abs(diff) <= precision) {  // equal
-            return true;
-        }
-
-        if (a <= b) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private static List<Object> asList(float[] floats) {
-        ArrayList<Object> list = new ArrayList<Object>(floats.length);
-        for (float f : floats) {
-            list.add(f);
-        }
-        return list;
-    }
-
-    private static List<Object> asList(int[] ints) {
-        ArrayList<Object> list = new ArrayList<Object>(ints.length);
-        for (int i : ints) {
-            list.add(i);
-        }
-        return list;
-    }
-
-    private static String printList(List<Object> list) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < list.size(); ++i) {
-            sb.append(list.get(i));
-            if (i < list.size() - 1) {
-                sb.append(", ");
-            }
-        }
-        return sb.toString();
-    }
-
-    private static String printArray(Object[] array) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < array.length; ++i) {
-            sb.append(array[i]);
-            if (i < array.length - 1) {
-                sb.append(", ");
-            }
-        }
-        return sb.toString();
-    }
 
     @Test
     public void greater_than_or_equal_test() {
@@ -207,15 +57,15 @@ public class RangeQueryInMemoryTest {
         float f = 0.11f;
         float g = 0.112f;
 
-        assertThat(greater_or_equal(a, b, 0.1f), is(true));
-        assertThat(greater_or_equal(a, c, 0.1f), is(false));
-        assertThat(greater_or_equal(c, a, 0.1f), is(true));
-        assertThat(greater_or_equal(a, d, 0.1f), is(true));
-        assertThat(greater_or_equal(a, b, 0.01f), is(false));
-        assertThat(greater_or_equal(a, e, 0.1f), is(false));
-        assertThat(greater_or_equal(e, a, 0.1f), is(true));
-        assertThat(greater_or_equal(a, f, 0.1f), is(true));
-        assertThat(greater_or_equal(a, g, 0.1f), is(true));
+        assertThat(FloatingPointMaths.greater_or_equal(a, b, 0.1f), is(true));
+        assertThat(FloatingPointMaths.greater_or_equal(a, c, 0.1f), is(false));
+        assertThat(FloatingPointMaths.greater_or_equal(c, a, 0.1f), is(true));
+        assertThat(FloatingPointMaths.greater_or_equal(a, d, 0.1f), is(true));
+        assertThat(FloatingPointMaths.greater_or_equal(a, b, 0.01f), is(false));
+        assertThat(FloatingPointMaths.greater_or_equal(a, e, 0.1f), is(false));
+        assertThat(FloatingPointMaths.greater_or_equal(e, a, 0.1f), is(true));
+        assertThat(FloatingPointMaths.greater_or_equal(a, f, 0.1f), is(true));
+        assertThat(FloatingPointMaths.greater_or_equal(a, g, 0.1f), is(true));
     }
 
     @Test
@@ -228,15 +78,15 @@ public class RangeQueryInMemoryTest {
         float e = 0.2f;
 
 
-        assertThat(lessthan_or_equal(a, b, 0.1f), is(true));
-        assertThat(lessthan_or_equal(b, a, 0.1f), is(true));
-        assertThat(lessthan_or_equal(a, b, 0.01f), is(true));
+        assertThat(FloatingPointMaths.lessthan_or_equal(a, b, 0.1f), is(true));
+        assertThat(FloatingPointMaths.lessthan_or_equal(b, a, 0.1f), is(true));
+        assertThat(FloatingPointMaths.lessthan_or_equal(a, b, 0.01f), is(true));
 
-        assertThat(lessthan_or_equal(a, c, 0.1f), is(true));
-        assertThat(lessthan_or_equal(c, a, 0.1f), is(false));
-        assertThat(lessthan_or_equal(a, d, 0.1f), is(true));
-        assertThat(lessthan_or_equal(a, e, 0.1f), is(true));
-        assertThat(lessthan_or_equal(e, a, 0.1f), is(true));
+        assertThat(FloatingPointMaths.lessthan_or_equal(a, c, 0.1f), is(true));
+        assertThat(FloatingPointMaths.lessthan_or_equal(c, a, 0.1f), is(false));
+        assertThat(FloatingPointMaths.lessthan_or_equal(a, d, 0.1f), is(true));
+        assertThat(FloatingPointMaths.lessthan_or_equal(a, e, 0.1f), is(true));
+        assertThat(FloatingPointMaths.lessthan_or_equal(e, a, 0.1f), is(true));
 
     }
 
@@ -263,18 +113,10 @@ public class RangeQueryInMemoryTest {
         float a = 0.123456f;
         float b = 0.1234f;
 
-        assertThat(float_eq(a, b, 0.0001f), is(true));
-        assertThat(float_eq(a, b, 0.001f), is(true));
-        assertThat(float_eq(a, b, 0.00001f), is(false));
+        assertThat(FloatingPointMaths.float_eq(a, b, 0.0001f), is(true));
+        assertThat(FloatingPointMaths.float_eq(a, b, 0.001f), is(true));
+        assertThat(FloatingPointMaths.float_eq(a, b, 0.00001f), is(false));
 
-    }
-
-    private static boolean float_eq(float a, float b, float precision) {
-        float diff_a_b = a - b;
-        if (diff_a_b < precision) {
-            return true;
-        }
-        return false;
     }
 
     static class Box {
@@ -309,8 +151,8 @@ public class RangeQueryInMemoryTest {
         }
 
         public boolean isInBox(Box box, float precision) {
-            return is_between(x, box.bottomLeft.x, box.topRight.x, precision)
-                    && is_between(y, box.bottomLeft.y, box.topRight.y, precision);
+            return FloatingPointMaths.is_between(x, box.bottomLeft.x, box.topRight.x, precision)
+                    && FloatingPointMaths.is_between(y, box.bottomLeft.y, box.topRight.y, precision);
         }
     }
 

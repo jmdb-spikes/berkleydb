@@ -3,13 +3,13 @@ package jmdb.spikes.spatial.rtree;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeafNode extends Node {
+class LeafNode extends Node {
 
     private final List<IndexEntry> entries = new ArrayList<IndexEntry>();
 
     private final int maxNumEntries;
 
-    public LeafNode(int maxNumEntries) {
+    LeafNode(int maxNumEntries) {
         this.maxNumEntries = maxNumEntries;
     }
 

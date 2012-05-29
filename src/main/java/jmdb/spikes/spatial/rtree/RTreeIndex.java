@@ -3,8 +3,8 @@ package jmdb.spikes.spatial.rtree;
 import java.util.List;
 
 /**
- * See http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.131.7887
- * And http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.129.3731
+ * See Guttman http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.131.7887
+ * And Beckmann http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.129.3731
  */
 public class RTreeIndex {
 

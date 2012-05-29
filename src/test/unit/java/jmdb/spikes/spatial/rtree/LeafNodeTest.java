@@ -13,15 +13,12 @@ public class LeafNodeTest {
     }
 
     @Test
-    public void has_a_capacity_for_entries() {
+    public void has_a_capacity_limit_for_entries() {
         LeafNode L = new LeafNode(3);
 
         assertThat(L.hasFreeCapacity(), is(true));
 
         L.installEntry(newEntry());
-
-        assertThat(L.hasFreeCapacity(), is(true));
-
         L.installEntry(newEntry());
 
         assertThat(L.hasFreeCapacity(), is(true));
@@ -31,6 +28,11 @@ public class LeafNodeTest {
         assertThat(L.hasFreeCapacity(), is(false));
 
     }
+
+
+
+
+
 
     private static IndexEntry newEntry() {
         return new IndexEntry(null, null);

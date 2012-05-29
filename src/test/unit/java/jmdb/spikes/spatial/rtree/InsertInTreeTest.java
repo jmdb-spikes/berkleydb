@@ -8,7 +8,7 @@ import static jmdb.spikes.spatial.rtree.NodeFactory.asLeafNode;
 public class InsertInTreeTest {
 
     @Test
-    public void insert_index_entry() {
+    public void insert_into_empty_leaf() {
         NodeFactory nodeFactory = new NodeFactory()
                 .minEntries(2)
                 .maxEntries(3);
@@ -18,7 +18,11 @@ public class InsertInTreeTest {
         IndexEntry E = new IndexEntry(new BoundingRectangle(20, 20, 20, 20), "UID-A");
 
 
-        LeafNode leafNodeForInsertsion = chooseLeafNode(root);
+        LeafNode L = chooseLeafNode(root);
+
+        if (L.hasFreeCapacity()) {
+            L.installEntry(E);
+        }
 
     }
 

@@ -1,4 +1,4 @@
-package jmdb.spikes.berkleydb.spatial.rtree;
+package jmdb.spikes.spatial.visualisation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

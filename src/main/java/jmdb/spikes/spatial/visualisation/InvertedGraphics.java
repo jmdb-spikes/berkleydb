@@ -1,4 +1,4 @@
-package jmdb.spikes.berkleydb.spatial.rtree;
+package jmdb.spikes.spatial.visualisation;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -233,8 +233,10 @@ public class InvertedGraphics extends Graphics2D {
         delegate.fillRect(x, invertedY, width, height);
     }
 
+    /**
+     * We don't need to invert drawRect because it is implemented by drawing lines which we have changed
+     */
     @Override public void drawRect(int x, int y, int width, int height) {
-        //int invertedY = heightInPixels - (y + height);
         super.drawRect(x, y, width, height);
     }
 

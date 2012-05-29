@@ -1,4 +1,4 @@
-package jmdb.spikes.berkleydb.spatial;
+package jmdb.spikes.spatial;
 
 import jmdb.spikes.platform.FloatingPointMaths;
 import org.junit.Test;

@@ -9,15 +9,30 @@ public class LeafNodeTest {
 
     @Test
     public void knows_its_a_leaf() {
-        assertThat(new LeafNode(0, 0).isLeaf(), is(true));
+        assertThat(new LeafNode(0).isLeaf(), is(true));
     }
 
     @Test
     public void has_a_capacity_for_entries() {
+        LeafNode L = new LeafNode(3);
 
-        LeafNode L = new LeafNode(2, 3);
+        assertThat(L.hasFreeCapacity(), is(true));
 
+        L.installEntry(newEntry());
 
+        assertThat(L.hasFreeCapacity(), is(true));
 
+        L.installEntry(newEntry());
+
+        assertThat(L.hasFreeCapacity(), is(true));
+
+        L.installEntry(newEntry());
+
+        assertThat(L.hasFreeCapacity(), is(false));
+
+    }
+
+    private static IndexEntry newEntry() {
+        return new IndexEntry(null, null);
     }
 }

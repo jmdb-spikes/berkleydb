@@ -1,12 +1,16 @@
 package jmdb.spikes.spatial.rtree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LeafNode extends Node {
-    public LeafNode(String s) {
 
-    }
+    private final List<IndexEntry> entries = new ArrayList<IndexEntry>();
 
-    public LeafNode(int minNumEntries, int maxNumEntries) {
+    private final int maxNumEntries;
 
+    public LeafNode(int maxNumEntries) {
+        this.maxNumEntries = maxNumEntries;
     }
 
     @Override public boolean isLeaf() {
@@ -14,10 +18,10 @@ public class LeafNode extends Node {
     }
 
     public void installEntry(IndexEntry e) {
-
+        entries.add(e);
     }
 
     public boolean hasFreeCapacity() {
-        return false;
+        return entries.size() < maxNumEntries;
     }
 }

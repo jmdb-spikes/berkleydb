@@ -9,7 +9,7 @@ class NodeFactory {
     private int maxNumberOfEntries = 3;
 
     public Node createRootNode() {
-        return new LeafNode("UID-N1");
+        return new LeafNode(maxNumberOfEntries);
     }
 
 

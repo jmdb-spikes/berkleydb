@@ -1,7 +1,7 @@
 package jmdb.spikes.spatial.rtree;
 
 import jmdb.spikes.spatial.visualisation.CartesianSketchPad;
-import jmdb.spikes.spatial.rtree.RTreeIndex;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -22,6 +22,7 @@ public class RTreeIndexTest {
     private Map<String, Place> mapOfPlaces;
 
 
+    @Ignore("WIP - JMDB 29-05-2012")
     @Test
     public void build_an_rtree() {
         mapOfPlaces = createMapOfPlaces(

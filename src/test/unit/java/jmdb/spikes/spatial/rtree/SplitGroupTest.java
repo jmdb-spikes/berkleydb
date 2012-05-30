@@ -24,7 +24,7 @@ public class SplitGroupTest {
         group.addEntry(E2);
         group.addEntry(E3);
 
-        BoundingRectangle r = group.getBoundingRectangle();
+        Rectangle r = group.getBoundingRectangle();
 
         debugToSketchPad(methodName(this), 40, 40, r, E1, E2, E3);
 
@@ -32,7 +32,6 @@ public class SplitGroupTest {
         assertThat(r.y1, closeTo(5, 0.001f));
         assertThat(r.x2, closeTo(30, 0.001f));
         assertThat(r.y2, closeTo(25, 0.001f));
-
 
     }
 
@@ -46,13 +45,13 @@ public class SplitGroupTest {
         return className + "_" + methodName;
     }
 
-    private static void debugToSketchPad(String name, int width, int height, BoundingRectangle bounds, IndexEntry... indexEntries) {
+    private static void debugToSketchPad(String name, int width, int height, Rectangle bounds, IndexEntry... indexEntries) {
         CartesianSketchPad sketchPad = new CartesianSketchPad(width, height).percentZoom(1000);
 
         sketchPad.addBoundingRectangle(bounds.x1, bounds.y1, bounds.x2, bounds.y2, Color.GREEN);
 
         for (IndexEntry e : indexEntries) {
-            BoundingRectangle r = e.boundingRectangle;
+            Rectangle r = e.rectangle;
             sketchPad.addBoundingRectangle(r.x1, r.y1, r.x2, r.y2);
         }
 
@@ -60,6 +59,6 @@ public class SplitGroupTest {
     }
 
     private static IndexEntry indexEntry(int x1, int y1, int x2, int y2) {
-        return new IndexEntry(new BoundingRectangle(x1, y1, x2, y2), "UID-E1");
+        return new IndexEntry(new Rectangle(x1, y1, x2, y2), "UID-E1");
     }
 }

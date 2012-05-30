@@ -2,12 +2,12 @@ package jmdb.spikes.spatial.rtree;
 
 public class IndexEntry {
 
-    public final BoundingRectangle boundingRectangle;
+    public final Rectangle rectangle;
     public final String key;
 
-    public IndexEntry(BoundingRectangle boundingRectangle, String key) {
+    public IndexEntry(Rectangle rectangle, String key) {
 
-        this.boundingRectangle = boundingRectangle;
+        this.rectangle = rectangle;
         this.key = key;
     }
 }

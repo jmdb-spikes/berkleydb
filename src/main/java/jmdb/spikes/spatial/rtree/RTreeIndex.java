@@ -18,14 +18,14 @@ public class RTreeIndex {
         return new RTreeInsertion(this, key);
     }
 
-    private void insert(String objectKey, BoundingRectangle boundingRectangle) {
+    private void insert(String objectKey, Rectangle rectangle) {
 
     }
 
     static class RTreeInsertion {
         private RTreeIndex parent;
         public final String objectKey;
-        public BoundingRectangle boundingRectangle;
+        public Rectangle rectangle;
 
         public RTreeInsertion(RTreeIndex parent, String objectKey) {
             this.parent = parent;
@@ -33,9 +33,9 @@ public class RTreeIndex {
         }
 
         public RTreeIndex atPoint(float x, float y) {
-            this.boundingRectangle = new BoundingRectangle(x, y, x, y);
+            this.rectangle = new Rectangle(x, y, x, y);
 
-            parent.insert(objectKey, boundingRectangle);
+            parent.insert(objectKey, rectangle);
 
             return parent;
         }

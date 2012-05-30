@@ -4,12 +4,12 @@ class IndexNode extends Node {
 
 
     public final long id;
-    public final BoundingRectangle boundingRectangle;
+    public final Rectangle rectangle;
 
 
-    IndexNode(long id, BoundingRectangle boundingRectangle) {
+    IndexNode(long id, Rectangle rectangle) {
         this.id = id;
-        this.boundingRectangle = boundingRectangle;
+        this.rectangle = rectangle;
     }
 
 

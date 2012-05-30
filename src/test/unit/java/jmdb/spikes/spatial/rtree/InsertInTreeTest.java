@@ -15,7 +15,7 @@ public class InsertInTreeTest {
 
         Node root = nodeFactory.createRootNode();
 
-        IndexEntry E = new IndexEntry(new BoundingRectangle(20, 20, 20, 20), "UID-A");
+        IndexEntry E = new IndexEntry(new Rectangle(20, 20, 20, 20), "UID-A");
 
 
         LeafNode L = chooseLeafNode(root);

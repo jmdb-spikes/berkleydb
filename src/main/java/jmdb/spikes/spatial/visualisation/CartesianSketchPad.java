@@ -50,12 +50,24 @@ public class CartesianSketchPad {
         return addBoundingRectangle((int) x1, (int) y1, (int) x2, (int) y2);
     }
 
+    public CartesianSketchPad addBoundingRectangle(float x1, float y1,
+                                                   float x2, float y2,
+                                                   Color color) {
+        return addBoundingRectangle((int) x1, (int) y1, (int) x2, (int) y2, color);
+    }
 
-    public CartesianSketchPad addBoundingRectangle(int bottomLeft_x, int bottomLeft_y,
-                                                   int topRight_y, int topRight_Y) {
 
-        this.boundingRectangles.add(rectangle(bottomLeft_x, bottomLeft_y,
-                                              topRight_y, topRight_Y));
+    public CartesianSketchPad addBoundingRectangle(int x1, int y1,
+                                                   int x2, int y2) {
+        return addBoundingRectangle(x1, y1, x2, y2, Color.LIGHT_GRAY);
+    }
+
+    public CartesianSketchPad addBoundingRectangle(int x1, int y1,
+                                                   int x2, int y2,
+                                                   Color color) {
+
+        this.boundingRectangles.add(rectangle(x1, y1,
+                                              x2, y2, color));
         return this;
     }
 
@@ -84,7 +96,7 @@ public class CartesianSketchPad {
                             canvasWidth - adj_top, canvasHeight - adj_top);
 
         for (Rectangle r : boundingRectangles) {
-            drawRectangle(g2, LIGHT_GRAY, strokeWidth,
+            drawRectangle(g2, r.color, strokeWidth,
                           r.bottomLeftX, r.bottomLeftY, r.topRightX, r.topRightY);
         }
 
@@ -189,8 +201,9 @@ public class CartesianSketchPad {
     }
 
 
-    private static Rectangle rectangle(int bottomLeftX, int bottomLeftY, int topRightX, int topRightY) {
-        return new Rectangle(bottomLeftX, bottomLeftY, topRightX, topRightY);
+    private static Rectangle rectangle(int bottomLeftX, int bottomLeftY,
+                                       int topRightX, int topRightY, Color color) {
+        return new Rectangle(bottomLeftX, bottomLeftY, topRightX, topRightY, color);
     }
 
     private static class Point {
@@ -209,11 +222,16 @@ public class CartesianSketchPad {
         public final int topRightX;
         public final int topRightY;
 
-        private Rectangle(int bottomLeftX, int bottomLeftY, int topRightX, int topRightY) {
+        public final Color color;
+
+        private Rectangle(int bottomLeftX, int bottomLeftY,
+                          int topRightX, int topRightY,
+                          Color color) {
             this.bottomLeftX = bottomLeftX;
             this.bottomLeftY = bottomLeftY;
             this.topRightX = topRightX;
             this.topRightY = topRightY;
+            this.color = color;
         }
     }
 

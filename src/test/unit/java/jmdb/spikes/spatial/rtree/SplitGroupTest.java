@@ -3,6 +3,7 @@ package jmdb.spikes.spatial.rtree;
 import jmdb.spikes.spatial.visualisation.CartesianSketchPad;
 import org.junit.Test;
 
+import java.awt.*;
 import java.io.File;
 
 import static java.lang.System.getProperty;
@@ -18,8 +19,6 @@ public class SplitGroupTest {
         IndexEntry E1 = indexEntry(10, 10, 20, 20);
         IndexEntry E2 = indexEntry(15, 15, 20, 25);
         IndexEntry E3 = indexEntry(25, 5, 30, 20);
-
-
 
         group.addEntry(E1);
         group.addEntry(E2);
@@ -49,12 +48,13 @@ public class SplitGroupTest {
 
     private static void debugToSketchPad(String name, int width, int height, BoundingRectangle bounds, IndexEntry... indexEntries) {
         CartesianSketchPad sketchPad = new CartesianSketchPad(width, height).percentZoom(1000);
+
+        sketchPad.addBoundingRectangle(bounds.x1, bounds.y1, bounds.x2, bounds.y2, Color.GREEN);
+
         for (IndexEntry e : indexEntries) {
             BoundingRectangle r = e.boundingRectangle;
             sketchPad.addBoundingRectangle(r.x1, r.y1, r.x2, r.y2);
         }
-
-        sketchPad.addBoundingRectangle(bounds.x1, bounds.y1, bounds.x2, bounds.y2);
 
         sketchPad.printTo(new File(getProperty("user.home") + "/tmp/test-images/" + name + ".png"));
     }

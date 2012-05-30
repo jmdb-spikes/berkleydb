@@ -1,13 +1,12 @@
 package jmdb.spikes.spatial.visualisation;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.awt.*;
 import java.util.List;
-
 
 import static java.awt.Color.DARK_GRAY;
 import static java.awt.Color.GREEN;
@@ -45,6 +44,12 @@ public class CartesianSketchPad {
         this.points.add(point(x, y));
         return this;
     }
+
+    public CartesianSketchPad addBoundingRectangle(float x1, float y1,
+                                                   float x2, float y2) {
+        return addBoundingRectangle((int) x1, (int) y1, (int) x2, (int) y2);
+    }
+
 
     public CartesianSketchPad addBoundingRectangle(int bottomLeft_x, int bottomLeft_y,
                                                    int topRight_y, int topRight_Y) {
@@ -134,7 +139,6 @@ public class CartesianSketchPad {
         g2.setStroke(new BasicStroke(strokeWidth));
 
 
-
         g2.setColor(color);
 
         g2.drawRect(bottom_x + adj_bottom, bottom_y + adj_bottom,
@@ -175,9 +179,7 @@ public class CartesianSketchPad {
     }
 
 
-
-
-    private static Point point(int x , int y) {
+    private static Point point(int x, int y) {
         return new Point(x, y);
     }
 
@@ -185,7 +187,6 @@ public class CartesianSketchPad {
         this.zoomFactor = zoomPercentage / 100;
         return this;
     }
-
 
 
     private static Rectangle rectangle(int bottomLeftX, int bottomLeftY, int topRightX, int topRightY) {

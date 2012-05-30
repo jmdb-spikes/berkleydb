@@ -1,7 +1,13 @@
 package jmdb.spikes.spatial.rtree;
 
 public class IndexEntry {
-    public IndexEntry(BoundingRectangle boundingRectangle, String s) {
 
+    public final BoundingRectangle boundingRectangle;
+    public final String key;
+
+    public IndexEntry(BoundingRectangle boundingRectangle, String key) {
+
+        this.boundingRectangle = boundingRectangle;
+        this.key = key;
     }
 }

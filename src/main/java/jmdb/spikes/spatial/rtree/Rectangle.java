@@ -22,6 +22,23 @@ class Rectangle {
         this.area = calculateArea(x1, y1, x2, y2);
     }
 
+    public static Rectangle calculateBoundingRectangle(Rectangle ... rectangles) {
+        float minX = Float.MAX_VALUE;
+        float maxX = Float.MIN_VALUE;
+
+        float minY = Float.MAX_VALUE;
+        float maxY = Float.MIN_VALUE;
+
+        for (Rectangle r : rectangles) {
+            minX = (r.x1 < minX) ? r.x1 : minX;
+            maxX = (r.x2 > maxX) ? r.x2 : maxX;
+
+            minY = (r.y1 < minY) ? r.y1 : minY;
+            maxY = (r.y2 > maxY) ? r.y2 : maxY;
+        }
+        return new Rectangle(minX, minY, maxX, maxY);
+    }
+
     public float area() {
         return area;
     }

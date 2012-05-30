@@ -23,9 +23,10 @@ public class NodeSplitterTest {
     public void split_with_just_two_entries_M_2() {
 
 
-        IndexEntry E1 = indexEntry();
-        IndexEntry E2 = indexEntry();
-        IndexEntry E3 = indexEntry();
+        IndexEntry E1 = pointIndexEntry(12, 12);
+        IndexEntry E2 = pointIndexEntry(20, 20);
+        IndexEntry E3 = pointIndexEntry(11, 12);
+
 
         List<IndexEntry> entries = asList(E1, E2, E3);
 
@@ -37,12 +38,12 @@ public class NodeSplitterTest {
 
         Split split = splitter.split(entries);
 
-        assertThat(split.group1.size(), is(1));
+        assertThat(split.group1.size(), is(2));
         assertThat(split.group1.get(0), is(E1));
+        assertThat(split.group1.get(1), is(E2));
 
-        assertThat(split.group2.size(), is(2));
+        assertThat(split.group2.size(), is(1));
         assertThat(split.group2.get(0), is(E3));
-        assertThat(split.group2.get(1), is(E2));
 
     }
 
@@ -81,8 +82,8 @@ public class NodeSplitterTest {
         }
     }
 
-    private IndexEntry indexEntry() {
-        return new IndexEntry(null, null);
+    private static IndexEntry pointIndexEntry(int x, int y) {
+        return new IndexEntry(new Rectangle(x, y, x, y), "UID-E1");
     }
 
 }

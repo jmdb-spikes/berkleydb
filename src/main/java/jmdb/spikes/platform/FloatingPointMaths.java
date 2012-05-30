@@ -10,7 +10,7 @@ public class FloatingPointMaths {
 
     public static boolean float_eq(float a, float b, float precision) {
         float diff_a_b = a - b;
-        if (diff_a_b < precision) {
+        if (abs(diff_a_b) < precision) {
             return true;
         }
         return false;

@@ -8,7 +8,7 @@ class Rectangle {
 
     public final float x2;
     public final float y2;
-    private float area;
+    public final float area;
 
     Rectangle(int x1, int y1, int x2, int y2) {
         this((float)x1, (float)y1, (float)x2, (float)y2);
@@ -23,10 +23,6 @@ class Rectangle {
     }
 
 
-
-    public float area() {
-        return area;
-    }
 
     private static float calculateArea(float x1, float y1, float x2, float y2) {
         float width = abs(x2 - x1);

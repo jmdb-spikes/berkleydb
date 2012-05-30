@@ -18,7 +18,7 @@ public class SplitGroup {
         boundingRectangles = rectangles.toArray(new Rectangle[rectangles.size()]);
     }
 
-    public Rectangle getBoundingRectangle() {
+    public Rectangle calculateBoundingRectangle() {
         return calculateBoundingRectangle(entries.toArray(new IndexEntry[entries.size()]));
     }
 
@@ -40,9 +40,17 @@ public class SplitGroup {
         return new Rectangle(minX, minY, maxX, maxY);
     }
 
-    public Rectangle getBoundingRectangleIfAdd(IndexEntry newIndexEntry) {
+    public Rectangle calculateBoundingRectangleIfAdd(IndexEntry newIndexEntry) {
         List<IndexEntry> expandedEntries = new ArrayList<IndexEntry>(entries);
         expandedEntries.add(newIndexEntry);
         return calculateBoundingRectangle(expandedEntries.toArray(new IndexEntry[entries.size() + 1]));
+    }
+
+    public int size() {
+        return entries.size();
+    }
+
+    public IndexEntry get(int i) {
+        return entries.get(i);
     }
 }

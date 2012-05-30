@@ -24,7 +24,7 @@ public class SplitGroupTest {
         group.addEntry(E2);
         group.addEntry(E3);
 
-        Rectangle r = group.getBoundingRectangle();
+        Rectangle r = group.calculateBoundingRectangle();
 
         debugToSketchPad(methodName(this), 40, 40, r, E1, E2, E3);
 
@@ -47,7 +47,7 @@ public class SplitGroupTest {
         group.addEntry(E2);
 
 
-        Rectangle r = group.getBoundingRectangleIfAdd(E3);
+        Rectangle r = group.calculateBoundingRectangleIfAdd(E3);
 
         debugToSketchPad(methodName(this), 40, 40, r, E1, E2, E3);
 

@@ -11,7 +11,7 @@ public class RectangleTest {
     public void can_calculate_area() {
         Rectangle r = new Rectangle(10, 10, 20, 20);
 
-        float area = r.area();
+        float area = r.area;
 
         assertThat(area,  closeTo(100, 0.001f));
     }

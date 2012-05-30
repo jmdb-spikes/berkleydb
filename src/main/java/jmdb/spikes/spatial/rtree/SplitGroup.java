@@ -22,7 +22,7 @@ public class SplitGroup {
         return calculateBoundingRectangle(entries.toArray(new IndexEntry[entries.size()]));
     }
 
-    public static Rectangle calculateBoundingRectangle(IndexEntry ... indexEntries) {
+    public static Rectangle calculateBoundingRectangle(IndexEntry... indexEntries) {
         float minX = Float.MAX_VALUE;
         float maxX = Float.MIN_VALUE;
 
@@ -40,4 +40,9 @@ public class SplitGroup {
         return new Rectangle(minX, minY, maxX, maxY);
     }
 
+    public Rectangle getBoundingRectangleIfAdd(IndexEntry newIndexEntry) {
+        List<IndexEntry> expandedEntries = new ArrayList<IndexEntry>(entries);
+        expandedEntries.add(newIndexEntry);
+        return calculateBoundingRectangle(expandedEntries.toArray(new IndexEntry[entries.size() + 1]));
+    }
 }

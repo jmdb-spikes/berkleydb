@@ -35,6 +35,29 @@ public class SplitGroupTest {
 
     }
 
+    @Test
+    public void can_tell_us_the_bounding_rectangle_if_we_were_to_add_an_entry() {
+        SplitGroup group = new SplitGroup();
+
+        IndexEntry E1 = indexEntry(10, 10, 20, 20);
+        IndexEntry E2 = indexEntry(15, 15, 20, 25);
+        IndexEntry E3 = indexEntry(25, 5, 30, 20);
+
+        group.addEntry(E1);
+        group.addEntry(E2);
+
+
+        Rectangle r = group.getBoundingRectangleIfAdd(E3);
+
+        debugToSketchPad(methodName(this), 40, 40, r, E1, E2, E3);
+
+        assertThat(r.x1, closeTo(10, 0.001f));
+        assertThat(r.y1, closeTo(5, 0.001f));
+        assertThat(r.x2, closeTo(30, 0.001f));
+        assertThat(r.y2, closeTo(25, 0.001f));
+
+    }
+
     private static String methodName(Object source) {
         String className = source.getClass().getSimpleName();
 

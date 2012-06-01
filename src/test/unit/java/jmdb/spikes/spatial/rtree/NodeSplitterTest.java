@@ -10,14 +10,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Taken from Guttman http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.131.7887
- * Section 3.5.3
+ * Taken from Guttman http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.131.7887 Section 3.5.3
  */
 public class NodeSplitterTest {
 
     /**
-     * Divide a group of M+1 entries into two groups
-     * M is the maximum number of entries that a leaf node can contain
+     * Divide a group of M+1 entries into two groups M is the maximum number of entries that a leaf node can contain
      */
     @Test
     public void split_with_just_two_entries_M_2() {
@@ -30,11 +28,12 @@ public class NodeSplitterTest {
 
         List<IndexEntry> entries = asList(E1, E2, E3);
 
-        StubEntryPicker entryPicker = stubEntryPicker()
+        StubGutmannAlgorithm algorithm = stubAlgorithm()
                 .seeds(E1, E3)
-                .nextEntries(E2);
+                .nextEntries(E2)
+                .addToFirstGroup();
 
-        NodeSplitter splitter = new GutmannLinearSplitter(entryPicker);
+        NodeSplitter splitter = new GutmannLinearSplitter(algorithm);
 
         Split split = splitter.split(entries);
 
@@ -47,15 +46,16 @@ public class NodeSplitterTest {
 
     }
 
-    private static StubEntryPicker stubEntryPicker() {
-        return new StubEntryPicker();
+    private static StubGutmannAlgorithm stubAlgorithm() {
+        return new StubGutmannAlgorithm();
     }
 
-    private static class StubEntryPicker implements EntryPicker {
+    private static class StubGutmannAlgorithm implements GutmannAlgorithm {
 
         private IndexEntry seedA;
         private IndexEntry seedB;
         private Iterator<IndexEntry> nextEntries;
+        private boolean addToFirst = false;
 
         public SplitSeeds pickSeeds(List<IndexEntry> entries) {
             return new SplitSeeds(seedA, seedB);
@@ -69,15 +69,24 @@ public class NodeSplitterTest {
             return nextEntries.next();
         }
 
+        public SplitGroup selectGroupToAddTo(SplitGroup group1, SplitGroup group2, IndexEntry nextEntry) {
+            return (addToFirst) ? group1 : group2;
+        }
 
-        public StubEntryPicker seeds(IndexEntry seedA, IndexEntry seedB) {
+
+        public StubGutmannAlgorithm seeds(IndexEntry seedA, IndexEntry seedB) {
             this.seedA = seedA;
             this.seedB = seedB;
             return this;
         }
 
-        public StubEntryPicker nextEntries(IndexEntry... nextEntries) {
+        public StubGutmannAlgorithm nextEntries(IndexEntry... nextEntries) {
             this.nextEntries = asList(nextEntries).iterator();
+            return this;
+        }
+
+        public StubGutmannAlgorithm addToFirstGroup() {
+            addToFirst = true;
             return this;
         }
     }
